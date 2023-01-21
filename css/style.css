@@ -1,0 +1,76 @@
+.page1 {
+    border: solid;
+}
+
+.first-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.score {
+    padding-top: 40px;
+    padding-left: 40px;
+    color: violet;
+}
+
+.timer {
+    padding-top: 40px;
+    padding-right: 40px;
+}
+
+.middle1 {
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+header {
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.introduction{
+    padding: 10px;
+}
+
+#buttonStart{
+    background-color: navy;
+    border-radius: 5px;
+    color: white;
+    padding: 5px;
+}
+
+#buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+#response {
+    background-color: navy;
+    border-radius: 5px;
+    color: white;
+    padding: 3px;
+    margin: 1px;
+    width: 200px;
+    display: none;
+}
+
+#resultTitle {
+    border-top: 1px gray;
+    margin-top: 30px;
+    width: 500px;
+}
+
+#buttonStart:hover {
+    background-color: rgb(186, 130, 238);
+    cursor: pointer;
+
+}
+
+#response:hover {
+    background-color: rgb(186, 130, 238);
+    cursor: pointer;
+}
