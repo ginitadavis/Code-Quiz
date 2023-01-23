@@ -19,7 +19,7 @@
 }
 
 .middle1 {
-    padding: 80px;
+    padding: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -73,4 +73,23 @@ header {
 #response:hover {
     background-color: rgb(186, 130, 238);
     cursor: pointer;
+}
+
+#finalScreen {
+    display: flex;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+#enterInitials {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+#initialData {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+#submitBtn {
+    margin-left: 4px;
+    margin-right: 4px;
 }
