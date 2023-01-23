@@ -60,26 +60,29 @@ buttonStart.addEventListener('click', function (event) {
 //the number of the screen - first screen index 0, second screen index 1, etc
 function verifyAnswer(answer, screenNumber) {
 
-    //Screen number will increase and then show the next screen
-
-    console.log("Correct answer " + correctAnswer[screenNumber] + " vs User answer " + answer);
+    //console.log("Correct answer " + correctAnswer[screenNumber] + " vs User answer " + answer);
 
     if (answer.trim() == correctAnswer[screenNumber].trim()) {
-        messageCorrect();
+        numberCorrectAnswers = messageCorrect();
     } else {
-        messageIncorrect();
+        numberCorrectAnswers = messageIncorrect();
         incorrectAnswer = true;
     }
 
+    //Screen number will increase and then show the next screen
     screenNumber++;
-
+    answer = "";
+    
     if (screenNumber < 5) {
         screenManagement(screenNumber);
     } else if (screenNumber === 5){
-        callFinalScreen();
+        var score = numberCorrectAnswers*20;
+        console.log("score: " + score);
+        callFinalScreen(score);
     }
 
-    answer = "";
+    
+
 
 }
 
@@ -153,7 +156,7 @@ function screenManagement(screenNumber) {
     //  TESTING TO ADD FUNCTION HERE
     function getValue(event){
 
-        console.log("getvalue screen number "+screenNumber);
+        //console.log("getvalue screen number "+screenNumber);
 
         event.preventDefault();
         var value = this.textContent.split(".");
@@ -165,24 +168,26 @@ function screenManagement(screenNumber) {
 
 // Displays message: CORRECT and adds scores
 function messageCorrect() {
+    console.log("numberCorrectAnswers from correct function"+numberCorrectAnswers)
     numberCorrectAnswers++;
     document.getElementById("resultTitle").style.borderTop = "gray 1px solid";
     document.getElementById("resultTitle").textContent = "CORRECT!"
     document.getElementById("resultTitle").style.color = "gray";
     document.getElementById("resultTitle").style.marginTop = "10px";
     document.getElementById("resultTitle").style.paddingTop = "10px";
+    console.log("numberCorrectAnswers "+numberCorrectAnswers)
+    return numberCorrectAnswers;
 }
 
-// Displays message: INCORRECT and substracts scores
+// Displays message: INCORRECT
 function messageIncorrect() {
-    numberCorrectAnswers--;
+    console.log("numberCorrectAnswers from Incorrect function "+numberCorrectAnswers)
     document.getElementById("resultTitle").style.borderTop = "gray 1px solid";
     document.getElementById("resultTitle").textContent = "INCORRECT!"
     document.getElementById("resultTitle").style.color = "gray";
     document.getElementById("resultTitle").style.marginTop = "10px";
     document.getElementById("resultTitle").style.paddingTop = "10px";
-
-
+    return numberCorrectAnswers;
 }
 
 function setTime() {
@@ -212,28 +217,27 @@ function setTime() {
     
 }
 
-function callFinalScreen(){
+function callFinalScreen(score){
     //Remove response buttons
     for (var b = 0; b < responses.length ; b++){
         responses[b].style.display = "none";
     }
 
+    buttonStart.remove();
+
     header.textContent = 'All done!';
-    introduction.textContent = 'Your final score is !';
+    introduction.textContent = 'Your final score is ' + score + "!";
     document.getElementById("resultTitle").textContent = ""
     document.getElementById("resultTitle").style.borderTop = "gray 1px";
 
     //
     var labelEl = document.getElementById("enterInitials").textContent = "Enter initials:";
     var initialData = document.getElementById("initialData").style.display = "block";
-    var submitBtn = document.querySelector("submitBtn");
+    var submitBtn = document.getElementById("submitBtn");//.textContent = "Submit";
 
-    //submitBtn.style.display = "block";
-
-    /*submitBtn.addEventListener("click", preventDefault1);
-    
-    function preventDefault1(event){
+    submitBtn.textContent = "Submit";
+    submitBtn.addEventListener("click", function(event){
         event.preventDefault();
-    }*/
+    })
 
 }
