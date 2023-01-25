@@ -3,6 +3,11 @@ var header = document.querySelector("header");
 var introduction = document.querySelector(".introduction");
 var responses = document.querySelectorAll('#response');
 var resultTitle = document.querySelectorAll('#resultTitle');
+var labelEl = document.getElementById("enterInitials")
+var submitBtn = document.getElementById("submitBtn");
+var goBackBtn = document.getElementById('goBack');
+var userScore = document.querySelector('#userScore');
+var clearScores = document.getElementById('clearScores');
 var correctAnswer = ["alerts", "parenthesis", "all of the above", "quotes", "console.log"];
 var answer;
 var numberCorrectAnswers = 0;
@@ -14,15 +19,15 @@ var fifthQuestions = ["1. JavaScript", "2. terminal/bash", "3. for loops", "4. c
 var middleSection = document.querySelector(".middle");
 var timer = document.querySelector(".timer");
 var secondsLeft = 101;
-var incorrectAnswer = false;
 var value;//check if I need this
 var firstScreen = false;
 
+var questionAsked = [false, false, false, false, false];
 
 //Function makes the first screen to be hidden
 buttonStart.addEventListener('click', function (event) {
     event.preventDefault();
-    //setTime();
+    setTime();
 
         header.textContent = 'Commonly used data types DO Not Include:';
         introduction.textContent = '';
@@ -38,58 +43,48 @@ buttonStart.addEventListener('click', function (event) {
             responses[2].textContent = firstQuestions[2];
             responses[3].textContent = firstQuestions[3];
 
-            //When the button is clicked, I get the text on the button and send it to function verifyAnswer
-            //I want the addEventListener to only be called once in each screen
-            responses[0].addEventListener('click', getValue1, { once: true });
-            responses[1].addEventListener('click', getValue1, { once: true });
-            responses[2].addEventListener('click', getValue1, { once: true });
-            responses[3].addEventListener('click', getValue1, { once: true });
+            responses.forEach(function(element){
+                element.addEventListener('click', getValue0);
+            })
 
-            function getValue1(event){
+
+            function getValue0(event){
                 event.preventDefault();
                 var value = this.textContent.split(".");
                 answer = value[1];
                 verifyAnswer(answer, 0);
+
+                screenManagement(1)
             }
     
-    
-}, { once: true });
+});
+
 
 
 //Compares the answer selected by the user with an array of correct answers and uses as index
 //the number of the screen - first screen index 0, second screen index 1, etc
 function verifyAnswer(answer, screenNumber) {
 
-    //console.log("Correct answer " + correctAnswer[screenNumber] + " vs User answer " + answer);
-
-    if (answer.trim() == correctAnswer[screenNumber].trim()) {
-        numberCorrectAnswers = messageCorrect();
-    } else {
-        numberCorrectAnswers = messageIncorrect();
-        incorrectAnswer = true;
+    if (!questionAsked[screenNumber]){
+        if (answer.trim() === correctAnswer[screenNumber].trim()) {
+            numberCorrectAnswers = messageCorrect();
+        } else {
+            numberCorrectAnswers = messageIncorrect();
+            secondsLeft = secondsLeft - 10;
+        }
+        questionAsked[screenNumber] = true;
     }
 
-    //Screen number will increase and then show the next screen
-    screenNumber++;
-    answer = "";
-    
-    if (screenNumber < 5) {
-        screenManagement(screenNumber);
-    } else if (screenNumber === 5){
-        var score = numberCorrectAnswers*20;
-        console.log("score: " + score);
+    if (screenNumber > 5){
+        stopInterval();
+        score = secondsLeft;
         callFinalScreen(score);
     }
 
-    
-
-
 }
 
-function screenManagement(screenNumber) {
 
-    //var pause = secondsLeft + 5;
-    
+function screenManagement(screenNumber) {
 
     //ScreenNumber 1 is the first screen with questions
     if (screenNumber === 1) {
@@ -100,12 +95,10 @@ function screenManagement(screenNumber) {
         responses[2].textContent = secondQuestions[2];
         responses[3].textContent = secondQuestions[3];
 
-        responses[0].addEventListener('click', getValue, { once: true });
-        responses[1].addEventListener('click', getValue, { once: true });
-        responses[2].addEventListener('click', getValue, { once: true });
-        responses[3].addEventListener('click', getValue, { once: true });
 
-        //console.log("Enters here "+ 1 + " Screen number 1");
+        responses.forEach(function(element){
+            element.addEventListener('click', getValue1);
+        })
 
         //ScreenNumber 2 is the second screen with questions
     } else if (screenNumber === 2) {
@@ -117,10 +110,9 @@ function screenManagement(screenNumber) {
         responses[2].textContent = thirdQuestions[2];
         responses[3].textContent = thirdQuestions[3];
 
-        responses[0].addEventListener('click', getValue, { once: true });
-        responses[1].addEventListener('click', getValue, { once: true });
-        responses[2].addEventListener('click', getValue, { once: true });
-        responses[3].addEventListener('click', getValue, { once: true });
+        responses.forEach(function(element){
+            element.addEventListener('click', getValue2);
+        })
 
         //ScreenNumber  is the third screen with questions
     } else if (screenNumber === 3) {
@@ -132,10 +124,10 @@ function screenManagement(screenNumber) {
         responses[2].textContent = fourthQuestions[2];
         responses[3].textContent = fourthQuestions[3];
 
-        responses[0].addEventListener('click', getValue, { once: true });
-        responses[1].addEventListener('click', getValue, { once: true });
-        responses[2].addEventListener('click', getValue, { once: true });
-        responses[3].addEventListener('click', getValue, { once: true });
+
+        responses.forEach(function(element){
+            element.addEventListener('click', getValue3);
+        })
 
         //ScreenNumber 4 is the fourth screen with questions
     } else if (screenNumber === 4) {
@@ -147,41 +139,74 @@ function screenManagement(screenNumber) {
         responses[2].textContent = fifthQuestions[2];
         responses[3].textContent = fifthQuestions[3];
 
-        responses[0].addEventListener('click', getValue, { once: true });
-        responses[1].addEventListener('click', getValue, { once: true });
-        responses[2].addEventListener('click', getValue, { once: true });
-        responses[3].addEventListener('click', getValue, { once: true });
+        responses.forEach(function(element){
+            element.addEventListener('click', getValue4);
+        })
 
     }
     //  TESTING TO ADD FUNCTION HERE
-    function getValue(event){
+    function getValue1(event){
 
-        //console.log("getvalue screen number "+screenNumber);
-
+        //var hello = event.target.innerText.split('.')[1]
+        //console.log(hello)
+        
         event.preventDefault();
         var value = this.textContent.split(".");
         answer = value[1];
         verifyAnswer(answer, screenNumber);
+
+        screenManagement(2)
     }
+
+    function getValue2(event){
+        
+        event.preventDefault();
+        var value = this.textContent.split(".");
+        answer = value[1];
+        verifyAnswer(answer, 2);
+
+        screenManagement(3)
+    }
+
+    function getValue3(event){
+        
+        event.preventDefault();
+        var value = this.textContent.split(".");
+        answer = value[1];
+        verifyAnswer(answer, 3);
+
+        screenManagement(4)
+    }
+
+    function getValue4(event){
+        
+        event.preventDefault();
+        var value = this.textContent.split(".");
+        answer = value[1];
+        verifyAnswer(answer, 4);
+
+        callFinalScreen(100);
+    }
+
 }
 
 
 // Displays message: CORRECT and adds scores
 function messageCorrect() {
-    console.log("numberCorrectAnswers from correct function"+numberCorrectAnswers)
+    //console.log("numberCorrectAnswers from correct function"+numberCorrectAnswers)
     numberCorrectAnswers++;
     document.getElementById("resultTitle").style.borderTop = "gray 1px solid";
     document.getElementById("resultTitle").textContent = "CORRECT!"
     document.getElementById("resultTitle").style.color = "gray";
     document.getElementById("resultTitle").style.marginTop = "10px";
     document.getElementById("resultTitle").style.paddingTop = "10px";
-    console.log("numberCorrectAnswers "+numberCorrectAnswers)
+    //console.log("numberCorrectAnswers "+numberCorrectAnswers)
     return numberCorrectAnswers;
 }
 
 // Displays message: INCORRECT
 function messageIncorrect() {
-    console.log("numberCorrectAnswers from Incorrect function "+numberCorrectAnswers)
+    //console.log("numberCorrectAnswers from Incorrect function "+numberCorrectAnswers)
     document.getElementById("resultTitle").style.borderTop = "gray 1px solid";
     document.getElementById("resultTitle").textContent = "INCORRECT!"
     document.getElementById("resultTitle").style.color = "gray";
@@ -190,20 +215,18 @@ function messageIncorrect() {
     return numberCorrectAnswers;
 }
 
+var timerInterval;
+
 function setTime() {
 
     // Sets interval in variable
-    var timerInterval = setInterval(function () {
+    timerInterval = setInterval(function () {
+
+
         secondsLeft--;
 
         //Displays the timer
         timer.textContent = "Time: " + secondsLeft;
-
-        //For any incorrect answer we subtract 10 seconds
-        if (incorrectAnswer) {
-            secondsLeft = secondsLeft - 10;
-        }
-        incorrectAnswer = false;
 
         if (secondsLeft <= 0) {
             // Stops execution of action at set interval
@@ -215,6 +238,10 @@ function setTime() {
     }, 1000);
     return timerInterval;
     
+}
+
+function stopInterval() {
+    clearInterval(timerInterval);
 }
 
 function callFinalScreen(score){
@@ -230,14 +257,61 @@ function callFinalScreen(score){
     document.getElementById("resultTitle").textContent = ""
     document.getElementById("resultTitle").style.borderTop = "gray 1px";
 
-    //
-    var labelEl = document.getElementById("enterInitials").textContent = "Enter initials:";
-    var initialData = document.getElementById("initialData").style.display = "block";
-    var submitBtn = document.getElementById("submitBtn");//.textContent = "Submit";
-
+    labelEl.textContent = "Enter initials:";
+    userInitials.style.display = "block";
+    submitBtn.style.display = "block";
     submitBtn.textContent = "Submit";
+
+
     submitBtn.addEventListener("click", function(event){
         event.preventDefault();
+        submitFn();
     })
+
+    
+
+}
+
+function submitFn(){
+    labelEl = document.getElementById("enterInitials").textContent = " ";
+    document.getElementById("userInitials").style.display = 'none';
+    var userInitials = document.querySelector("#userInitials").value;
+    introduction.style.display = 'none';
+    
+    userScore.style.display = 'block';
+    header.textContent = 'High Scores';
+    submitBtn.style.display = 'none';
+
+    goBack.style.display = 'block';
+    clearScores.style.display = 'block';
+
+    localStorage.setItem("score", secondsLeft);
+    localStorage.setItem("userInitials", userInitials);
+    console.log('userInitials' + userInitials);
+
+    highScores();
+
+}
+
+goBackBtn.addEventListener('click', function goBackHome(e){
+    e.preventDefault();
+
+})
+
+
+
+function highScores(){
+    //userScore = text where I will display
+
+    var highScoreUser = localStorage.getItem('userInitials');
+    score = localStorage.getItem('score');
+    userScore.textContent = "User Initials: " + highScoreUser + " score: " + score;
+
+}
+
+function callMainScreen(){
+    header.textContent = 'Coding Quiz Challenge';
+    introduction.textContent = 'Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time';
+    buttonStart.setAttribute("style", "display:block;");
 
 }
