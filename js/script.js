@@ -324,7 +324,7 @@ function submitFn(){
 
 function showHighScores(){
     
-    window.alert('User Initial: '+ localStorage.getItem('userInitials') + '\n highest score: ' + localStorage.getItem('score'));
+    window.alert('User Initial: '+ localStorage.getItem('userInitials') + '\nHighest score: ' + localStorage.getItem('score'));
 }
 
 clearScores.addEventListener('click', function(e){

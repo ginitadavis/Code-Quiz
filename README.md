@@ -15,7 +15,7 @@ The game starts after pressing the start button, the screen will show a quiz and
 
 The button goBack will take the user to the main screen where the game beggins, and the button High Scores will take the user to see all the highest scores stored.
 
-Link to the deployed app 
+Link to the deployed app https://ginitadavis.github.io/Code-Quiz/
 
 
 ## License
