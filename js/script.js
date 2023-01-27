@@ -1,3 +1,4 @@
+var titleScore = document.querySelector('.score');
 var buttonStart = document.querySelector('#buttonStart');
 var header = document.querySelector("header");
 var introduction = document.querySelector(".introduction");
@@ -18,11 +19,18 @@ var fourthQuestions = ["1. commas", "2. curly brackets", "3. quotes", "4. parent
 var fifthQuestions = ["1. JavaScript", "2. terminal/bash", "3. for loops", "4. console.log"];
 var middleSection = document.querySelector(".middle");
 var timer = document.querySelector(".timer");
-var secondsLeft = 101;
+var secondsLeft = 100;
 var value;//check if I need this
 var firstScreen = false;
+var highScoreUser;
+var userScores;
+var timerInterval;
+var stopTime = false;
+
 
 var questionAsked = [false, false, false, false, false];
+
+timer.textContent = "Time: " + 100;
 
 //Function makes the first screen to be hidden
 buttonStart.addEventListener('click', function (event) {
@@ -76,7 +84,7 @@ function verifyAnswer(answer, screenNumber) {
     }
 
     if (screenNumber > 5){
-        stopInterval();
+        pauseTimer();
         score = secondsLeft;
         callFinalScreen(score);
     }
@@ -184,7 +192,6 @@ function screenManagement(screenNumber) {
         var value = this.textContent.split(".");
         answer = value[1];
         verifyAnswer(answer, 4);
-
         callFinalScreen(100);
     }
 
@@ -215,36 +222,39 @@ function messageIncorrect() {
     return numberCorrectAnswers;
 }
 
-var timerInterval;
-
+//Runs the time until it gets to zero seconds
 function setTime() {
-
-    // Sets interval in variable
-    timerInterval = setInterval(function () {
-
-
+    timerInterval = setInterval(() => {
         secondsLeft--;
 
         //Displays the timer
         timer.textContent = "Time: " + secondsLeft;
-
         if (secondsLeft <= 0) {
             // Stops execution of action at set interval
-            clearInterval(timerInterval);
+            pauseTimer();
             timer.textContent = "Time: " + 0;
+        }
 
+        //If the game is finished it freezes the timer
+        if (stopTime){
+            secondsLeft++;
+            timer.textContent = "Time: " + secondsLeft;
+            pauseTimer();
         }
 
     }, 1000);
     return timerInterval;
-    
 }
 
-function stopInterval() {
+//Stops the timer
+function pauseTimer() {
     clearInterval(timerInterval);
 }
 
 function callFinalScreen(score){
+
+    stopTime = true;
+
     //Remove response buttons
     for (var b = 0; b < responses.length ; b++){
         responses[b].style.display = "none";
@@ -252,8 +262,10 @@ function callFinalScreen(score){
 
     buttonStart.remove();
 
+
+    //Show the user their score
     header.textContent = 'All done!';
-    introduction.textContent = 'Your final score is ' + score + "!";
+    introduction.textContent = 'Your final score is ' + secondsLeft + "!";
     document.getElementById("resultTitle").textContent = ""
     document.getElementById("resultTitle").style.borderTop = "gray 1px";
 
@@ -261,7 +273,6 @@ function callFinalScreen(score){
     userInitials.style.display = "block";
     submitBtn.style.display = "block";
     submitBtn.textContent = "Submit";
-
 
     submitBtn.addEventListener("click", function(event){
         event.preventDefault();
@@ -284,34 +295,51 @@ function submitFn(){
 
     goBack.style.display = 'block';
     clearScores.style.display = 'block';
+    
+    highScoreUser = localStorage.getItem('userInitials');
+    score = localStorage.getItem('score');
+    userScore.textContent = "User Initials: " + userInitials + " score: " + secondsLeft;
 
-    localStorage.setItem("score", secondsLeft);
-    localStorage.setItem("userInitials", userInitials);
-    console.log('userInitials' + userInitials);
+    //Current values
+    var tempUser = userInitials;
+    var tempScore = secondsLeft;
 
-    highScores();
+    //Values from localStorage
+    var localUser = localStorage.getItem('userInitials');
+    var localScore = localStorage.getItem('score');
 
+    //Compare if values from storage are null
+    if (localUser !== null || localUser !== 'undefined'){
+        console.log("enters to save in the local storage");
+        console.log(tempUser);
+        if (tempScore > localScore){
+            localStorage.setItem("score", tempScore);
+            localStorage.setItem("userInitials", tempUser);
+        }
+    }
+
+    return secondsLeft, userInitials;
 }
 
-goBackBtn.addEventListener('click', function goBackHome(e){
+
+function showHighScores(){
+    
+    window.alert('User Initial: '+ localStorage.getItem('userInitials') + '\n highest score: ' + localStorage.getItem('score'));
+}
+
+clearScores.addEventListener('click', function(e){
     e.preventDefault();
+
+    //Clear highest score
+
+    delete localStorage.score;
+    delete localStorage.userInitials;
 
 })
 
+titleScore.addEventListener('click', alertFn);
 
-
-function highScores(){
-    //userScore = text where I will display
-
-    var highScoreUser = localStorage.getItem('userInitials');
-    score = localStorage.getItem('score');
-    userScore.textContent = "User Initials: " + highScoreUser + " score: " + score;
-
+function alertFn(){
+    showHighScores();
 }
 
-function callMainScreen(){
-    header.textContent = 'Coding Quiz Challenge';
-    introduction.textContent = 'Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time';
-    buttonStart.setAttribute("style", "display:block;");
-
-}

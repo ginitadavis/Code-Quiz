@@ -1,3 +1,7 @@
+* {
+    font-family: 'Bad Script', cursive;
+}
+
 .page1 {
     border: solid;
 }
@@ -64,17 +68,6 @@ header {
     width: 500px;
 }
 
-#buttonStart:hover {
-    background-color: rgb(186, 130, 238);
-    cursor: pointer;
-
-}
-
-#response:hover {
-    background-color: rgb(186, 130, 238);
-    cursor: pointer;
-}
-
 #finalScreen {
     display: flex;
     margin-left: 4px;
@@ -129,4 +122,30 @@ header {
     width: 200px;
     height: 40px;
     display: none;
+}
+
+.score:hover {
+    color: blue;
+    cursor: pointer;
+}
+
+#buttonStart:hover {
+    background-color: rgb(186, 130, 238);
+    cursor: pointer;
+
+}
+
+#response:hover {
+    background-color: rgb(186, 130, 238);
+    cursor: pointer;
+}
+
+#goBack:hover {
+    background-color: rgb(186, 130, 238);
+    cursor: pointer;
+}
+
+#clearScores:hover {
+    background-color: rgb(186, 130, 238);
+    cursor: pointer;
 }
