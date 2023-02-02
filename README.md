@@ -9,7 +9,7 @@ There was no starter code and I created a basic HTML code with some elements tha
 
 ## Usage
 
-![alt tex](img/main-screen.png)
+![alt tex](assets/img/main-screen.png)
 
 The game starts after pressing the start button, the screen will show a quiz and when the users select the wrong answer they will be deducted 20 seconds of time. The user who answers the most amount of correct answers in the least amount of time will score the highest score. After the quiz is finished the users will be prompted to enter their initials that will be saved in the localStorage that will be available even if the user closes the screen.
 
